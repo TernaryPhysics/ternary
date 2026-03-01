@@ -323,7 +323,6 @@ main() {
     check_requirements
     detect_interface
     install_ternary
-    setup_bpf
     install_services
     start_services
     print_status
