@@ -5,8 +5,8 @@
 # AI at the kernel boundary. The decision happens at the moment the packet exists.
 #
 # Usage:
-#   curl -sSL ternary.sh | sh
-#   curl -sSL ternary.sh | sh -s -- --interface eth0
+#   curl -sSL ternary.sh | bash
+#   curl -sSL ternary.sh | bash -s -- --interface eth0
 #
 # Options:
 #   --interface IFACE   Network interface to attach (default: auto-detect)
@@ -321,7 +321,7 @@ print_status() {
     echo "    cat $DATA_DIR/run_summary.json   # View metrics"
     echo ""
     echo "  To uninstall:"
-    echo "    curl -sSL ternary.sh | sh -s -- --uninstall"
+    echo "    curl -sSL ternary.sh | bash -s -- --uninstall"
     echo ""
 }
 
