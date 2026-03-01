@@ -17,7 +17,7 @@
 set -e
 
 VERSION="0.1.0"
-REPO_URL="https://github.com/TernaryPhysics/ternary.git"
+RELEASE_URL="https://github.com/TernaryPhysics/ternary/releases/download/v${VERSION}/ternary-${VERSION}-linux-amd64.tar.gz"
 INSTALL_DIR="/opt/ternary-physics"
 DATA_DIR="/var/lib/ternary-physics"
 BPF_PIN_PATH="/sys/fs/bpf/ternary-physics"
@@ -121,14 +121,11 @@ check_requirements() {
     fi
     log "  BTF: enabled ✓"
 
-    # Check for required tools
-    for cmd in clang llc bpftool make git python3; do
+    # Check for required tools (no build tools needed - using pre-built binaries)
+    for cmd in bpftool python3 curl; do
         if ! command -v $cmd &>/dev/null; then
             error "Required tool not found: $cmd"
             case $cmd in
-                clang|llc)
-                    error "Install with: apt install clang llvm"
-                    ;;
                 bpftool)
                     error "Install with: apt install linux-tools-common linux-tools-\$(uname -r)"
                     ;;
@@ -139,16 +136,7 @@ check_requirements() {
             exit 1
         fi
     done
-    log "  Tools: clang, llc, bpftool, make, git, python3 ✓"
-
-    # Check libbpf headers
-    if [[ ! -f /usr/include/bpf/libbpf.h ]]; then
-        warn "libbpf headers not found, will attempt to install"
-        apt-get update && apt-get install -y libbpf-dev 2>/dev/null || \
-        yum install -y libbpf-devel 2>/dev/null || \
-        { error "Failed to install libbpf-dev"; exit 1; }
-    fi
-    log "  libbpf: installed ✓"
+    log "  Tools: bpftool, python3, curl ✓"
 }
 
 # Auto-detect network interface
@@ -176,35 +164,24 @@ detect_interface() {
     log "  Interface: $INTERFACE (auto-detected)"
 }
 
-# Download and build
+# Download and install
 install_ternary() {
     log "Installing TernaryPhysics..."
 
-    # Clone or update repo
-    if [[ -d "$INSTALL_DIR/.git" ]]; then
-        log "  Updating existing installation..."
-        cd "$INSTALL_DIR"
-        git fetch origin
-        git reset --hard origin/main
-    else
-        log "  Cloning repository..."
-        rm -rf "$INSTALL_DIR"
-        git clone --branch main --depth 1 "$REPO_URL" "$INSTALL_DIR"
-        cd "$INSTALL_DIR"
+    # Download release
+    log "  Downloading v${VERSION}..."
+    mkdir -p "$INSTALL_DIR"
+    cd "$INSTALL_DIR"
+
+    if ! curl -sSL "$RELEASE_URL" -o ternary.tar.gz; then
+        error "Failed to download release from $RELEASE_URL"
+        exit 1
     fi
 
-    # Generate vmlinux.h
-    log "  Generating vmlinux.h..."
-    mkdir -p include
-    bpftool btf dump file /sys/kernel/btf/vmlinux format c > include/vmlinux.h
-
-    # Build BPF programs
-    log "  Building BPF programs..."
-    make core
-
-    # Build userspace tools
-    log "  Building userspace components..."
-    make bitnet 2>/dev/null || true
+    # Extract
+    log "  Extracting..."
+    tar -xzf ternary.tar.gz --strip-components=1
+    rm -f ternary.tar.gz
 
     # Create data directory
     mkdir -p "$DATA_DIR"/{models,metrics,samples}
@@ -212,6 +189,8 @@ install_ternary() {
     # Install Python dependencies
     log "  Installing Python dependencies..."
     pip3 install numpy 2>/dev/null || python3 -m pip install numpy 2>/dev/null || true
+
+    log "  Installation complete ✓"
 }
 
 # Setup BPF maps
@@ -221,12 +200,27 @@ setup_bpf() {
     # Create pin directory
     mkdir -p "$BPF_PIN_PATH"
 
-    # Detach any existing XDP program
+    # Detach any existing XDP program (all modes)
+    ip link set dev "$INTERFACE" xdpgeneric off 2>/dev/null || true
+    ip link set dev "$INTERFACE" xdpdrv off 2>/dev/null || true
     ip link set dev "$INTERFACE" xdp off 2>/dev/null || true
 
-    # Load and attach using the deploy script
+    # Clean up old pins
+    rm -f "$BPF_PIN_PATH"/* 2>/dev/null || true
+
+    # Load all BPF programs with pinned maps
     log "  Loading observer on $INTERFACE..."
-    "$INSTALL_DIR/deploy/load-observer.sh" "$INTERFACE"
+    bpftool prog loadall "$INSTALL_DIR/bpf/observer.o" "$BPF_PIN_PATH" \
+        pinmaps "$BPF_PIN_PATH"
+
+    # Attach XDP to interface
+    ip link set dev "$INTERFACE" xdpgeneric pinned "$BPF_PIN_PATH/xdp_observer" 2>/dev/null || \
+        bpftool net attach xdpgeneric pinned "$BPF_PIN_PATH/xdp_observer" dev "$INTERFACE"
+
+    # Enable telemetry
+    bpftool map update pinned "$BPF_PIN_PATH/telemetry_cfg" \
+        key 0 0 0 0 \
+        value 1 0 0 0  1 0 0 0  1 0 0 0  1 0 0 0  1 0 0 0  1 0 0 0
 
     log "  Observer attached to $INTERFACE ✓"
 }
@@ -245,7 +239,9 @@ Wants=network.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=$INSTALL_DIR/deploy/load-observer.sh $INTERFACE
+Environment=INSTALL_DIR=$INSTALL_DIR
+Environment=BPF_PIN_PATH=$BPF_PIN_PATH
+ExecStart=/bin/bash -c 'mkdir -p $BPF_PIN_PATH && ip link set dev $INTERFACE xdp off 2>/dev/null || true && bpftool prog loadall $INSTALL_DIR/bpf/observer.o $BPF_PIN_PATH pinmaps $BPF_PIN_PATH && ip link set dev $INTERFACE xdpgeneric pinned $BPF_PIN_PATH/xdp_observer'
 ExecStop=/bin/bash -c 'ip link set dev $INTERFACE xdp off; rm -rf $BPF_PIN_PATH'
 
 [Install]
