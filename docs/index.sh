@@ -285,6 +285,13 @@ start_services() {
     fi
 
     log "Starting services..."
+
+    # Clean up any existing BPF state
+    ip link set dev "$INTERFACE" xdpgeneric off 2>/dev/null || true
+    ip link set dev "$INTERFACE" xdpdrv off 2>/dev/null || true
+    ip link set dev "$INTERFACE" xdp off 2>/dev/null || true
+    rm -rf "$BPF_PIN_PATH" 2>/dev/null || true
+
     systemctl enable ternary-observer
     systemctl enable ternary-ai
     systemctl start ternary-observer
