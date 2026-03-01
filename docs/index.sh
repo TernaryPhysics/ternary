@@ -241,7 +241,7 @@ Type=oneshot
 RemainAfterExit=yes
 Environment=INSTALL_DIR=$INSTALL_DIR
 Environment=BPF_PIN_PATH=$BPF_PIN_PATH
-ExecStart=/bin/bash -c 'mkdir -p $BPF_PIN_PATH && ip link set dev $INTERFACE xdp off 2>/dev/null || true && bpftool prog loadall $INSTALL_DIR/bpf/observer.o $BPF_PIN_PATH pinmaps $BPF_PIN_PATH && ip link set dev $INTERFACE xdpgeneric pinned $BPF_PIN_PATH/xdp_observer'
+ExecStart=/bin/bash -c 'mkdir -p $BPF_PIN_PATH && rm -f $BPF_PIN_PATH/* 2>/dev/null || true && ip link set dev $INTERFACE xdp off 2>/dev/null || true && bpftool prog loadall $INSTALL_DIR/bpf/observer.o $BPF_PIN_PATH pinmaps $BPF_PIN_PATH && ip link set dev $INTERFACE xdpgeneric pinned $BPF_PIN_PATH/xdp_observer'
 ExecStop=/bin/bash -c 'ip link set dev $INTERFACE xdp off; rm -rf $BPF_PIN_PATH'
 
 [Install]
