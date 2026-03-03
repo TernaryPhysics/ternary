@@ -12,7 +12,7 @@ The first commercially deployed autonomous infrastructure intelligence platform.
 
 ## 🚀 Production Validated
 
-**53+ hours continuous operation · 20 autonomous model deployments · 100% accuracy · Zero memory leaks**
+**42+ hours continuous operation · 22 autonomous model deployments · 100% accuracy · Zero memory leaks**
 
 TernaryPhysics is not a research project. It's running in production, making real decisions on live infrastructure.
 
@@ -108,9 +108,9 @@ The decision path and learning path never block each other. Inference runs at li
 
 From our DigitalOcean droplet deployment (March 2026):
 
-- **Uptime:** 53+ hours continuous operation
-- **Models deployed:** 20 versions (v001 → v019)
-- **Latest accuracy:** 100% (model v019)
+- **Uptime:** 42+ hours continuous operation
+- **Models deployed:** 22 versions (v001 → v021)
+- **Latest accuracy:** 100% (model v021)
 - **Memory leaks:** 0 across all hot-swap deployments
 - **False positives:** 0
 - **Manual tuning:** 0
@@ -223,8 +223,8 @@ Traditional neural networks use 32-bit floats. Ternary networks use {-1, 0, +1}.
 
 - Deployed: March 2026
 - Environment: DigitalOcean droplet (production traffic)
-- Runtime: 53+ hours continuous
-- Models: 20 autonomous deployments
+- Runtime: 42+ hours continuous
+- Models: 22 autonomous deployments
 - Accuracy: 100% (latest model)
 - Memory: Zero leaks across all hot-swaps
 
