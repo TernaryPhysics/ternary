@@ -1,0 +1,92 @@
+# License
+
+TernaryPhysics uses a dual-license model:
+
+## Kernel/BPF Code - GPL-2.0
+
+All BPF programs and kernel-space code are licensed under **GPL-2.0** as required by the Linux kernel to use GPL-only kernel functions.
+
+This includes:
+- `core/*/kernel/` - All BPF programs
+- Any code that runs in kernel space
+- Any code that uses GPL-only kernel APIs
+
+See `LICENSE-GPL-2.0` for full text.
+
+## Userspace Code - Apache 2.0
+
+All userspace code, tooling, and libraries are licensed under **Apache License 2.0**.
+
+This includes:
+- `core/license/` - License validator
+- `bitnet/` - Local AI and training code
+- `deploy/` - Deployment scripts
+- `tools/` - Tooling and utilities
+- `docs/` - Documentation
+- `website/` - Website code
+
+See `LICENSE-APACHE-2.0` for full text.
+
+## Commercial Licensing
+
+Commercial licenses are available that allow:
+- Proprietary modifications
+- Closed-source integrations
+- Enterprise support and SLAs
+- Legal indemnification
+
+Contact: sales@ternaryphysics.com
+
+## Patent Grant
+
+TernaryPhysics technology is covered by pending patents (U.S. Provisional Patent Application filed March 2026).
+
+Under both GPL-2.0 and Apache 2.0 licenses, you receive a patent license to use the software as distributed, provided you comply with the license terms.
+
+Commercial license holders receive broader patent grants. See your commercial license agreement for details.
+
+## Why Dual License?
+
+**GPL-2.0 for BPF:** The Linux kernel requires BPF programs to be GPL-2.0 to access GPL-only kernel functions. This is a hard technical requirement, not a choice.
+
+**Apache 2.0 for Userspace:** Userspace code doesn't have this restriction, so we use Apache 2.0 for:
+- More permissive commercial use
+- Explicit patent grant
+- Better compatibility with other licenses
+- Clearer commercial licensing path
+
+## File Headers
+
+Each file indicates its license:
+
+**BPF/Kernel files:**
+```c
+// SPDX-License-Identifier: GPL-2.0
+```
+
+**Userspace files:**
+```rust
+// SPDX-License-Identifier: Apache-2.0
+```
+
+## Choosing a License
+
+**You want to use TernaryPhysics:**
+- ✅ Use under GPL-2.0/Apache-2.0 (free)
+- ✅ Modify and redistribute under same licenses
+- ✅ Use in commercial products (with proper attribution)
+
+**You want to create proprietary modifications:**
+- ❌ Not allowed under GPL-2.0/Apache-2.0
+- ✅ Get a commercial license
+
+**You want to avoid GPL compliance:**
+- ❌ BPF code must be GPL-2.0 (kernel requirement)
+- ✅ Userspace code is Apache-2.0 (no copyleft)
+- ✅ Commercial license for proprietary use
+
+---
+
+**Copyright © 2026 TernaryPhysics. All rights reserved.**
+
+**Patent Pending:** U.S. Provisional Patent Application filed March 2026
