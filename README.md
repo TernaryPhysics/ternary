@@ -1,20 +1,19 @@
 # TernaryPhysics
 
-**Intelligence at wire speed.**
+**AI at the kernel boundary. The decision happens at the moment the packet exists.**
 
-The first commercially deployed autonomous infrastructure intelligence platform. Ternary neural networks running in kernel space, making microsecond decisions at the packet level.
+Autonomous neural networks running in eBPF, making microsecond decisions on every packet at line rate.
 
 [![License](https://img.shields.io/badge/License-Dual%20(GPL--2.0%20%2B%20Apache--2.0)-blue.svg)](LICENSE)
-[![Production Status](https://img.shields.io/badge/Status-Production%20Validated-green.svg)]()
 [![Patent](https://img.shields.io/badge/Patent-Pending-yellow.svg)]()
 
 ---
 
-## 🚀 Production Validated
+## What Is This?
 
-**42+ hours continuous operation · 22 autonomous model deployments · 100% accuracy · Zero memory leaks**
+TernaryPhysics puts AI directly in the Linux kernel (via eBPF) where it can see and act on 100% of network traffic before anything else. It learns from real outcomes, trains models automatically, and deploys them with zero downtime.
 
-TernaryPhysics is not a research project. It's running in production, making real decisions on live infrastructure.
+**No configuration. No manual tuning. No human in the loop.**
 
 ---
 
@@ -104,21 +103,6 @@ The decision path and learning path never block each other. Inference runs at li
 
 ---
 
-## Production Proof
-
-From our DigitalOcean droplet deployment (March 2026):
-
-- **Uptime:** 42+ hours continuous operation
-- **Models deployed:** 22 versions (v001 → v021)
-- **Latest accuracy:** 100% (model v021)
-- **Memory leaks:** 0 across all hot-swap deployments
-- **False positives:** 0
-- **Manual tuning:** 0
-
-**48-hour burn-in test: COMPLETE** ✅
-
----
-
 ## Use Cases
 
 ### Financial Services
@@ -153,20 +137,17 @@ TernaryPhysics uses a **dual-license model**:
 
 See [LICENSE](LICENSE) for details.
 
-### Commercial Licensing
+### Open Source
 
-Commercial licenses available for:
-- Proprietary modifications
-- Closed-source integrations
-- Enterprise support & SLAs
-- Legal indemnification
+TernaryPhysics is **free and open source** under dual license (GPL-2.0 for kernel code, Apache-2.0 for userspace).
 
-**Pricing:**
-- **Trial:** 14 days free (shadow mode)
-- **Startup:** $99/month per node (up to 10 nodes)
-- **Enterprise:** Custom pricing, unlimited nodes, priority support
+You can:
+- ✅ Use it freely in production
+- ✅ Modify and redistribute
+- ✅ Contribute improvements back
+- ✅ Use commercially with proper attribution
 
-Contact: [sales@ternaryphysics.com](mailto:sales@ternaryphysics.com)
+See [LICENSE](LICENSE) for full details.
 
 ---
 
@@ -187,18 +168,16 @@ U.S. Provisional Patent Application filed March 2026 covering:
 
 We welcome security researchers to help make TernaryPhysics safer.
 
-**Bug Bounty:** $100 - $15,000 based on severity
-
 Report vulnerabilities: [security@ternaryphysics.com](mailto:security@ternaryphysics.com)
 
-See our [Security Policy](https://ternaryphysics.com/security) for details.
+See [SECURITY.md](SECURITY.md) for our security policy.
 
 ---
 
 ## Support
 
-- **Community:** [GitHub Issues](https://github.com/TernaryPhysics/ternary/issues)
-- **Enterprise:** [sales@ternaryphysics.com](mailto:sales@ternaryphysics.com)
+- **Community:** [GitHub Discussions](https://github.com/TernaryPhysics/ternary/discussions)
+- **Bug Reports:** [GitHub Issues](https://github.com/TernaryPhysics/ternary/issues)
 - **Security:** [security@ternaryphysics.com](mailto:security@ternaryphysics.com)
 
 ---
@@ -217,21 +196,16 @@ Traditional neural networks use 32-bit floats. Ternary networks use {-1, 0, +1}.
 
 ---
 
-## Status
+## Project Status
 
-**Production Validated** ✅
+**Active Development** 🚧
 
-- Deployed: March 2026
-- Environment: DigitalOcean droplet (production traffic)
-- Runtime: 42+ hours continuous
-- Models: 22 autonomous deployments
-- Accuracy: 100% (latest model)
-- Memory: Zero leaks across all hot-swaps
+TernaryPhysics is under active development and has been successfully tested in production environments. We're preparing for broader community adoption.
 
-**Next Milestone:** Public beta (Q2 2026)
+**Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved.
 
 ---
 
-**Copyright © 2026 TernaryPhysics. All rights reserved.**
+**Copyright © 2026 TernaryPhysics**
 
-**Patent Pending** · **Production Validated** · **Autonomous Infrastructure Intelligence**
+Open Source · Patent Pending · Autonomous Infrastructure Intelligence
