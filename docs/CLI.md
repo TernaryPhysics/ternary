@@ -88,7 +88,7 @@ ternaryphysics live on
 ternaryphysics live off
 ```
 
-**Shadow mode**: Model observes and logs what it would do, but takes no action. This is the default for the first 14 days.
+**Shadow mode**: Model observes and logs what it would do, but takes no action. This is the default for the first 30 days.
 
 **Live mode**: Model takes action on traffic (drop, redirect, etc.).
 
@@ -115,7 +115,7 @@ Configuration
     Train interval:   1h
 
   Safety:
-    Shadow period:    14d
+    Shadow period:    30d
     Auto-rollback:    True
     Min accuracy:     90%
 
@@ -183,7 +183,7 @@ ternaryphysics models
 ternaryphysics live
 ```
 
-### After Shadow Period (14 days)
+### After Shadow Period (30 days)
 
 ```bash
 # Verify accuracy is good

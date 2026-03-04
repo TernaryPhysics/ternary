@@ -24,7 +24,7 @@ Hey HN, I built TernaryPhysics to answer a question: what if ML inference happen
 
 **Why open source:** Kernel-space AI is too security-critical to be a black box. Dual licensed GPL-2.0 (kernel) + Apache-2.0 (userspace). Patent pending but code is free.
 
-Install starts in shadow mode (observe-only for 14 days):
+Install starts in shadow mode (observe-only for 30 days):
 ```
 curl -sSL https://install.ternaryphysics.com | sh
 ```

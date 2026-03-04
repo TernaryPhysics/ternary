@@ -86,7 +86,7 @@ sudo journalctl -u ternaryphysics -f
 
 ## What Happens After Install
 
-1. **Shadow Mode (14 days)** - System observes traffic without taking action
+1. **Shadow Mode (30 days)** - System observes traffic without taking action
 2. **Learning** - Models train automatically from observed outcomes
 3. **Validation** - Performance gates ensure models improve before deployment
 4. **Live** - After validation, system can act on traffic (requires explicit opt-in)
@@ -99,7 +99,7 @@ TernaryPhysics runs with zero configuration by default. Optional settings:
 # View current config
 ternaryphysics config show
 
-# Set shadow mode duration (default: 14 days)
+# Set shadow mode duration (default: 30 days)
 ternaryphysics config set shadow_duration 7d
 
 # Enable specific actions

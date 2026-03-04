@@ -30,7 +30,7 @@ kubectl apply -f install.ternaryphysics.com/k8s.yaml
 ```
 
 **What happens:**
-1. System enters 14-day **shadow mode** (observe only, no actions)
+1. System enters 30-day **shadow mode** (observe only, no actions)
 2. Learns your infrastructure's normal behavior
 3. Trains models automatically from observed outcomes
 4. After validation, can go live and start acting on traffic
@@ -72,7 +72,7 @@ Packet arrives → AI scores → Action taken → Outcome observed → Label gen
 - **Feature discovery** – System discovers new signals automatically, generates BPF code
 
 ### 🛡️ Production-Grade Safety
-- **Shadow mode** – 14 days of validation before acting on traffic
+- **Shadow mode** – 30 days of validation before acting on traffic
 - **Performance gates** – Blocks regressing models from deployment
 - **Memory-safe** – 20 deployments, zero leaks, zero cleanup failures
 - **One-command rollback** – Instant revert if needed
@@ -81,7 +81,7 @@ Packet arrives → AI scores → Action taken → Outcome observed → Label gen
 - **Air-gap support** – Works offline, no internet required
 - **No telemetry** – Your data stays on your infrastructure
 - **Compliance-ready** – GDPR, HIPAA, FedRAMP-compatible architecture
-- **14-day free trial** – Full feature access in shadow mode
+- **30-day free trial** – Full feature access in shadow mode
 
 ---
 

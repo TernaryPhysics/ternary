@@ -69,7 +69,7 @@ Patent pending on the core innovations, but the code is free to use, modify, and
 curl -sSL https://install.ternaryphysics.com | sh
 ```
 
-The system starts in shadow mode—14 days of observation before taking any action. Watch it learn. See what it finds. Then decide if you want to let it act.
+The system starts in shadow mode—30 days of observation before taking any action. Watch it learn. See what it finds. Then decide if you want to let it act.
 
 ## Get Involved
 
