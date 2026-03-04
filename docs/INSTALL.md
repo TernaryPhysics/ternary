@@ -87,7 +87,7 @@ sudo journalctl -u ternaryphysics -f
 ## What Happens After Install
 
 1. **Shadow Mode (30 days)** - System observes traffic without taking action
-2. **Learning** - Models train automatically from observed outcomes
+2. **Learning** - Models train automatically
 3. **Validation** - Performance gates ensure models improve before deployment
 4. **Live** - After validation, system can act on traffic (requires explicit opt-in)
 

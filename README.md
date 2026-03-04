@@ -11,9 +11,9 @@ Autonomous neural networks running in eBPF, making microsecond decisions on ever
 
 ## What Is This?
 
-TernaryPhysics puts AI directly in the Linux kernel (via eBPF) where it can see and act on 100% of network traffic before anything else. It learns from real outcomes, trains models automatically, and deploys them with zero downtime.
+TernaryPhysics puts AI directly in the Linux kernel (via eBPF) where it can see and act on 100% of network traffic before anything else.
 
-**No configuration. No manual tuning. No human in the loop.**
+**No configuration. No manual tuning.**
 
 ---
 
@@ -31,9 +31,8 @@ kubectl apply -f install.ternaryphysics.com/k8s.yaml
 
 **What happens:**
 1. System enters 30-day **shadow mode** (observe only, no actions)
-2. Learns your infrastructure's normal behavior
-3. Trains models automatically from observed outcomes
-4. After validation, can go live and start acting on traffic
+2. System adapts to your infrastructure
+3. After validation, can go live and start acting on traffic
 
 **No configuration required.** Zero manual tuning.
 
@@ -47,37 +46,27 @@ TernaryPhysics runs AI directly in the Linux kernel (via eBPF), making decisions
 - **Threat detection** – Blocks anomalies, DDoS, intrusion attempts
 - **Observability** – Intelligently filters telemetry (keep signal, drop noise)
 - **Auto-scaling** – Predicts capacity needs before saturation
-- **Continuous learning** – Improves autonomously from real outcomes
-
-### The Flywheel
-
-```
-Packet arrives → AI scores → Action taken → Outcome observed → Label generated → Model retrains → Better decisions
-```
-
-**No human in the loop.** The system learns from what actually happens, not what you tell it.
 
 ---
 
 ## Key Features
 
-### 🧠 Kernel-Space Neural Networks
+### Kernel-Space Neural Networks
 - **Ternary weights** {-1, 0, +1} optimized for eBPF constraints
 - **Sub-microsecond inference** – Decisions happen before userspace sees the packet
 - **Zero GPU dependency** – Runs on any Linux kernel with BPF support
 
-### 🔄 Continuous Learning
-- **Outcome-based training** – Ground truth from network behavior, not manual labels
+### Adaptive System
 - **Hot-swap deployments** – New models replace old ones atomically, zero downtime
-- **Feature discovery** – System discovers new signals automatically, generates BPF code
+- **Improves over time** – System adapts to your specific environment
 
-### 🛡️ Production-Grade Safety
+### Production-Grade Safety
 - **Shadow mode** – 30 days of validation before acting on traffic
 - **Performance gates** – Blocks regressing models from deployment
-- **Memory-safe** – 20 deployments, zero leaks, zero cleanup failures
+- **Memory-safe** – Zero leaks, zero cleanup failures
 - **One-command rollback** – Instant revert if needed
 
-### 🏢 Enterprise-Ready
+### Enterprise-Ready
 - **Air-gap support** – Works offline, no internet required
 - **No telemetry** – Your data stays on your infrastructure
 - **Compliance-ready** – GDPR, HIPAA, FedRAMP-compatible architecture
@@ -87,19 +76,12 @@ Packet arrives → AI scores → Action taken → Outcome observed → Label gen
 
 ## How It Works
 
-### Two Paths, One System
-
-**Decision Path (per packet, <1μs):**
+**Per-packet inference (<1μs):**
 ```
 Packet → BPF hook → Feature extraction → Ternary NN inference → Action (route/drop/mark)
 ```
 
-**Learning Path (continuous background):**
-```
-Outcomes → Ground truth labeling → Model training → Validation → Hot-swap deployment
-```
-
-The decision path and learning path never block each other. Inference runs at line rate while training happens asynchronously in userspace.
+Inference runs at line rate. Training happens asynchronously in userspace without blocking packet processing.
 
 ---
 
@@ -122,7 +104,6 @@ Deploys as a DaemonSet. Sees all pod-to-pod traffic, ingress, and service mesh w
 ## Documentation
 
 - **Website:** [ternaryphysics.com](https://ternaryphysics.com)
-- **Whitepaper:** [ternaryphysics.com/whitepaper](https://ternaryphysics.com/whitepaper)
 - **CLI Reference:** [ternaryphysics.com/docs](https://ternaryphysics.com/docs)
 - **Security:** [ternaryphysics.com/security](https://ternaryphysics.com/security)
 
@@ -137,36 +118,17 @@ TernaryPhysics uses a **dual-license model**:
 
 See [LICENSE](LICENSE) for details.
 
-### Open Source
-
-TernaryPhysics is **free and open source** under dual license (GPL-2.0 for kernel code, Apache-2.0 for userspace).
-
-You can:
-- ✅ Use it freely in production
-- ✅ Modify and redistribute
-- ✅ Contribute improvements back
-- ✅ Use commercially with proper attribution
-
-See [LICENSE](LICENSE) for full details.
-
 ---
 
 ## Patent
 
 **Patent Pending**
 
-U.S. Provisional Patent Application filed March 2026 covering:
-1. Kernel-space ternary neural network inference
-2. Continuous learning feedback loop from network outcomes
-3. Automatic feature discovery with BPF code generation
-4. Shadow validation and hot-swap deployment
-5. Memory-safe model lifecycle management
+U.S. Provisional Patent Application filed March 2026.
 
 ---
 
 ## Security
-
-We welcome security researchers to help make TernaryPhysics safer.
 
 Report vulnerabilities: [security@ternaryphysics.com](mailto:security@ternaryphysics.com)
 
@@ -200,15 +162,13 @@ Traditional neural networks use 32-bit floats. Ternary networks use {-1, 0, +1}.
 - Perfect for kernel constraints (eBPF has strict limits)
 - Fast inference (sub-microsecond)
 
-**The physics:** Ternary weights create decision boundaries that are simpler, faster, and provably safe to run in kernel space.
-
 ---
 
 ## Project Status
 
-**Active Development** 🚧
+**Active Development**
 
-TernaryPhysics is under active development and has been successfully tested in production environments. We're preparing for broader community adoption.
+TernaryPhysics is under active development. We're preparing for broader community adoption.
 
 **Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved.
 
@@ -216,4 +176,4 @@ TernaryPhysics is under active development and has been successfully tested in p
 
 **Copyright © 2026 TernaryPhysics**
 
-Open Source · Patent Pending · Autonomous Infrastructure Intelligence
+Open Source · Patent Pending

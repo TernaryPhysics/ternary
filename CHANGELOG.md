@@ -18,7 +18,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Initial public release
 - Dual-license model (GPL-2.0 for kernel code, Apache-2.0 for userspace)
 - Kernel-space ternary neural network inference via eBPF
-- Continuous learning feedback loop from network outcomes
+- Adaptive system that improves over time
 - Shadow mode for 30-day validation before acting on traffic
 - Hot-swap model deployment with zero downtime
 - One-command install for bare metal and Kubernetes

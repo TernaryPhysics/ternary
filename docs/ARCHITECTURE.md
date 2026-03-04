@@ -37,18 +37,9 @@
 │                        USER SPACE                               │
 │                                                                 │
 │  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐          │
-│  │  Collector  │──►│   Trainer   │──►│  Deployer   │          │
+│  │  Collector  │   │   Trainer   │   │  Deployer   │          │
 │  │  (ringbuf)  │   │  (ternary)  │   │  (hot-swap) │          │
 │  └─────────────┘   └─────────────┘   └─────────────┘          │
-│         │                 ▲                 │                   │
-│         │                 │                 │                   │
-│         ▼                 │                 ▼                   │
-│  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐          │
-│  │   Feature   │──►│   Labeler   │   │   Shadow    │          │
-│  │    Store    │   │  (outcomes) │   │  Validator  │          │
-│  └─────────────┘   └─────────────┘   └─────────────┘          │
-│                                                                 │
-│              Feedback Loop Controller                           │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -60,11 +51,6 @@
 3. **Run inference** (ternary neural network)
 4. **Take action** (pass, drop, redirect, sample)
 5. **Emit telemetry** to ringbuf
-6. **Userspace observes** outcomes
-7. **Labels generated** from ground truth
-8. **Model retrained** on labeled data
-9. **Hot-swap deployed** to kernel
-10. **Repeat forever**
 
 ## Components
 
@@ -83,24 +69,8 @@
 | Component | Directory | Purpose |
 |-----------|-----------|---------|
 | Collector | `collector/` | Ringbuf consumer, feature store |
-| Trainer | `trainer/` | Ternary model training with STE |
+| Trainer | `trainer/` | Ternary model training |
 | Deployer | `deployer/` | BPF loading, hot-swap, rollback |
-| Feedback | `feedback/` | Autonomous learning loop |
-| Discovery | `discovery/` | Feature ranking, domain detection |
-
-### Domain Detection
-
-The system automatically determines what domain it's operating in based on behavior:
-
-| Action | Category |
-|--------|----------|
-| DROP | Threat-Response |
-| REDIRECT | Traffic-Steering |
-| SAMPLE | Data-Collection |
-| TAG | Traffic-Marking |
-| PASS | Passthrough |
-
-Roles emerge from outcomes (e.g., `blocked` → `Blocker`). Result: `Threat-Response: Blocker`.
 
 ## Model Architecture
 
@@ -125,9 +95,8 @@ Events flow from kernel to userspace via BPF ringbuf:
 struct telemetry_event {
     __u64 timestamp_ns;
     __u64 flow_id;
-    __u8  type;         // packet, flow, action, outcome
+    __u8  type;         // packet, flow, action
     __u8  action_type;
-    __u8  outcome_type;
     __u8  n_features;
     __s32 score;
     __s32 features[8];

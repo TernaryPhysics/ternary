@@ -33,7 +33,7 @@ AI at the kernel boundary
 
 System Status
 ----------------------------------------
-  Feedback loop:  running
+  System:         running
   Mode:           shadow (observing only)
 
   Active model:   v35
