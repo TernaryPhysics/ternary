@@ -1,165 +1,102 @@
 # Contributing to TernaryPhysics
 
-Thank you for your interest in contributing to TernaryPhysics! This document provides guidelines for contributing to the project.
+Thanks for helping build AI at the kernel boundary! This document explains how to report issues, propose features, and submit patches across kernel-space BPF code, the BitNet userspace stack, and supporting docs.
 
-## Getting Started
+## Ways to Contribute
 
-1. **Fork the repository** on GitHub
-2. **Clone your fork** locally
-3. **Create a branch** for your changes: `git checkout -b feature/your-feature-name`
-4. **Make your changes** following our coding standards
-5. **Test your changes** thoroughly
-6. **Commit** with clear, descriptive messages
-7. **Push** to your fork
-8. **Open a Pull Request**
+- **Issues** – Report bugs, performance regressions, feature requests, or documentation gaps. Include environment details (kernel version, NIC, distro, Python version, etc.) and reproduction steps.
+- **Discussions** – Use GitHub Discussions (or issues tagged `question`) for design reviews, architecture ideas, or roadmap topics.
+- **Documentation** – Improve READMEs, guides, and diagrams. Kernel and ML concepts benefit from clear prose—never hesitate to document your findings.
+- **Code** – Fix bugs, add tests, improve observability, extend actions, or unlock new BitNet workflows.
+- **Operational Knowledge** – Share deployment recipes, benchmarking scripts, and lessons learned from real environments.
 
-## Development Setup
+## Ground Rules
+
+1. Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+2. All contributions are licensed under the project’s dual-license policy (`LICENSE`, `LICENSE-APACHE-2.0`, `LICENSE-GPL-2.0`). By submitting a patch you certify you have the right to do so under these terms.
+3. Seek consensus early. Draft design docs or short proposals for major user-facing changes or kernel-level interfaces before writing large patches.
+4. Keep changes focused. Prefer multiple small pull requests over one giant merge.
+
+## Development Environment
+
+| Area | Minimum Setup |
+|------|---------------|
+| Kernel/BPF | Linux 6.1+, Clang/LLVM `>= 16`, `bpftool`, `libbpf` headers, `make`, `clang-format` |
+| Userspace BitNet | Python 3.10+, `pip` / `uv`, virtualenv, pytest, numpy, torch (optional for CPU training) |
+| Tooling | `just`/`make`, Docker or Podman for deployment testing, GitHub CLI (optional) |
+
+Typical workflow:
 
 ```bash
-# Clone the repo
-git clone https://github.com/TernaryPhysics/ternary.git
-cd ternary
-
-# Follow install instructions
-./deploy/install.sh
+git clone https://github.com/<you>/kernelphysics.git
+cd bpf-inference
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+make -C core build
+pytest bitnet/tests
 ```
 
-## What We're Looking For
+Document any additional steps you take so others can reproduce them.
 
-### High Priority
-- Bug fixes and stability improvements
-- Performance optimizations
-- Documentation improvements
-- Test coverage expansion
-- eBPF verifier compatibility improvements
+## Pull Request Checklist
 
-### Welcome Contributions
-- New feature extractors
-- Additional action types
-- Improved training algorithms
-- Better monitoring and observability
-- Example deployments and use cases
+Before requesting review:
 
-### Bigger Projects (Discuss First)
-- Major architectural changes
-- New deployment targets (e.g., Windows, BSD)
-- Alternative ML backends
-- Breaking API changes
+- Tests and static checks pass: `pytest`, `make lint`, `cargo test` (when relevant), plus any directory-specific scripts mentioned in READMEs.
+- User-facing or behavioral changes include docs and configuration samples.
+- Added or modified telemetry fields and actions include version gates to avoid breaking running deployments.
+- Commits are rebased on the latest `main` (avoid merge commits).
+- Pull request description links to the issue (or explains rationale) and highlights risky or delicate areas (BPF verifier changes, concurrency, etc.).
 
-## Code Standards
+## Coding Guidelines
 
-### eBPF/Kernel Code
-- Follow Linux kernel coding style
-- Keep functions small and focused
-- Document any non-obvious logic
-- Ensure BPF verifier compatibility
-- Use SPDX-License-Identifier: GPL-2.0
+**Kernel / BPF**
 
-### Python/Userspace Code
-- Follow PEP 8 style guidelines
-- Add type hints where helpful
-- Write docstrings for public APIs
-- Keep dependencies minimal
-- Use SPDX-License-Identifier: Apache-2.0
+- Prefer small helpers and inline functions to satisfy the BPF verifier and keep stack usage predictable.
+- Keep public structs and map layouts backwards-compatible; document versioned changes in `docs/` and the changelog.
+- Run `clang-format` (LLVM style) on C headers and programs.
+- Keep feature flags explicit; avoid hidden `#ifdef` behavior in shared headers.
 
-### Commit Messages
-```
-Short summary (50 chars or less)
+**Userspace (Python, Rust, Go)**
 
-More detailed explanation if needed. Wrap at 72 characters.
-Explain the problem this commit solves and why you chose this
-approach over alternatives.
+- Favor type annotations and dataclasses for telemetry payloads.
+- Use `black` / `ruff` (or the formatter listed in directory READMEs) to keep style consistent.
+- Write unit tests for parsing, model training, and deployment logic. For hardware-heavy code, add mocks/fakes and note hardware requirements in the test docstrings.
 
-Fixes #123
-```
+**Documentation**
 
-## Testing
+- Provide context for diagrams and include sources for metrics/benchmarks.
+- When describing interfaces, include both kernel and userspace version numbers.
+- Keep Markdown wrapped at ~100 columns to ease reviews.
 
-Before submitting a PR:
+## Release Notes and Changelog
 
-1. **Run existing tests** (if available)
-2. **Test manually** in a safe environment
-3. **Document test steps** in your PR description
-4. **Consider edge cases** and failure modes
+If a pull request changes runtime behavior, APIs, or CLI output, append a note under the unreleased section of `CHANGELOG.md` (or create it if missing). Mention migration steps and compatibility notes (e.g., “map schema change requires redeploy”).
 
-### Testing BPF Programs
-- Test with BPF verifier on multiple kernel versions
-- Verify memory bounds checking
-- Test with high packet rates
-- Check for resource leaks
+## Design Proposals
 
-### Testing Training Pipeline
-- Test with small datasets first
-- Verify model convergence
-- Check hot-swap deployment works
-- Monitor memory usage over time
+For significant new features (new action types, new trainer loops, discovery primitives), open a design doc under `docs/proposals/` or start a discussion with:
 
-## Pull Request Process
+1. Problem statement and motivation.
+2. Background, including related tickets or incidents.
+3. Proposed solution with diagrams and data formats.
+4. Testing and rollout strategy.
+5. Alternatives considered.
 
-1. **Update documentation** if you're changing behavior
-2. **Add tests** for new functionality
-3. **Keep PRs focused** - one feature/fix per PR
-4. **Respond to feedback** promptly and professionally
-5. **Rebase on main** before merging to keep history clean
+We value early collaboration far more than perfect initial designs.
 
-### PR Checklist
-- [ ] Code follows project style guidelines
-- [ ] Self-review completed
-- [ ] Comments added for complex logic
-- [ ] Documentation updated
-- [ ] Tests added/updated
-- [ ] All tests pass
-- [ ] No new warnings or errors
-- [ ] Commit messages are clear
+## Review Expectations
 
-## Reporting Bugs
+- Maintainers target first response within 2 business days.
+- Small PRs (<200 LOC) typically need 1 approval; larger or kernel-touching ones need 2.
+- Reviewers focus on correctness, safety, and operational impact. Style nits should be actionable and ideally automated by linters/formatters.
+- Authors should respond to review feedback within 10 days or mark the PR as draft until ready.
 
-Use GitHub Issues to report bugs. Include:
+## Getting Help
 
-- **Clear title** describing the issue
-- **Steps to reproduce** the problem
-- **Expected behavior** vs actual behavior
-- **Environment details**:
-  - OS and version
-  - Kernel version
-  - Python version
-  - Relevant hardware specs
-- **Logs or error messages**
-- **Minimal reproducible example** if possible
+- Tag maintainers or subject-matter experts using GitHub mentions (e.g., `@KernelPhysics/maintainers` if available).
+- Join community syncs or office hours announced in `SUPPORT.md`.
+- Report security vulnerabilities privately via [SECURITY.md](SECURITY.md) or email `security@ternaryphysics.com`.
+- Browse existing discussions, docs, and design notes before starting a new thread—your question may already be answered.
 
-## Suggesting Features
-
-We love feature suggestions! Open a GitHub Discussion or Issue with:
-
-- **Use case**: What problem does this solve?
-- **Proposed solution**: How would it work?
-- **Alternatives**: What other approaches did you consider?
-- **Impact**: Who would benefit from this?
-
-## Code of Conduct
-
-This project follows the Contributor Covenant Code of Conduct. By participating, you agree to uphold this code. Report unacceptable behavior to security@ternaryphysics.com.
-
-## License
-
-By contributing to TernaryPhysics, you agree that your contributions will be licensed under:
-
-- **GPL-2.0** for kernel/BPF code
-- **Apache-2.0** for userspace code
-
-See [LICENSE](LICENSE) for details.
-
-## Questions?
-
-- **General questions**: [GitHub Discussions](https://github.com/TernaryPhysics/ternary/discussions)
-- **Bug reports**: [GitHub Issues](https://github.com/TernaryPhysics/ternary/issues)
-- **Security issues**: security@ternaryphysics.com
-
-## Recognition
-
-Contributors will be recognized in:
-- Release notes for their contributions
-- GitHub contributor graphs
-- Project README (for significant contributions)
-
-Thank you for helping make TernaryPhysics better!
+Thank you for helping push AI inference into the kernel safely and responsibly!

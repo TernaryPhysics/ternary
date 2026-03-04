@@ -180,6 +180,14 @@ See [SECURITY.md](SECURITY.md) for our security policy.
 - **Bug Reports:** [GitHub Issues](https://github.com/TernaryPhysics/ternary/issues)
 - **Security:** [security@ternaryphysics.com](mailto:security@ternaryphysics.com)
 
+## Community & Governance
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contributing Guide](CONTRIBUTING.md)
+- [Governance](GOVERNANCE.md)
+- [Security Policy](SECURITY.md)
+- [Support](SUPPORT.md)
+
 ---
 
 ## Why "Ternary"?
