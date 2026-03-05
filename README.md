@@ -4,7 +4,7 @@
 
 Autonomous neural networks running in eBPF, making microsecond decisions on every packet at line rate.
 
-[![License](https://img.shields.io/badge/License-Dual%20(GPL--2.0%20%2B%20Apache--2.0)-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary-blue.svg)](LICENSE)
 [![Patent](https://img.shields.io/badge/Patent-Pending-yellow.svg)]()
 
 ---
@@ -21,12 +21,12 @@ TernaryPhysics puts AI directly in the Linux kernel (via eBPF) where it can see 
 
 ### Bare Metal / VM
 ```bash
-curl -sSL install.ternaryphysics.com | sh
+curl -sSL ternary.sh | bash
 ```
 
 ### Kubernetes
 ```bash
-kubectl apply -f install.ternaryphysics.com/k8s.yaml
+kubectl apply -f https://ternaryphysics.com/k8s.yaml
 ```
 
 **What happens:**
@@ -111,10 +111,10 @@ Deploys as a DaemonSet. Sees all pod-to-pod traffic, ingress, and service mesh w
 
 ## License
 
-TernaryPhysics uses a **dual-license model**:
+**Source:** Proprietary
+**Binaries:** Freely available via container images and install scripts
 
-- **GPL-2.0** for BPF/kernel code (required by Linux kernel)
-- **Apache-2.0** for userspace code (tooling, training, deployment)
+The compiled binaries and container images are freely distributed. Source code is not publicly available.
 
 See [LICENSE](LICENSE) for details.
 
@@ -168,12 +168,12 @@ Traditional neural networks use 32-bit floats. Ternary networks use {-1, 0, +1}.
 
 **Active Development**
 
-TernaryPhysics is under active development. We're preparing for broader community adoption.
+TernaryPhysics is under active development.
 
-**Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved.
+Have feedback or feature requests? Open an issue on [GitHub](https://github.com/TernaryPhysics/ternary/issues).
 
 ---
 
 **Copyright © 2026 TernaryPhysics**
 
-Open Source · Patent Pending
+Patent Pending
