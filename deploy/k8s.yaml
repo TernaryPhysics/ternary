@@ -55,7 +55,7 @@ spec:
         - operator: Exists
       containers:
         - name: observer
-          image: ghcr.io/ternaryphysics/bpf-inference:latest
+          image: ghcr.io/ternaryphysics/bpf-inference:ternary-core
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
