@@ -3,10 +3,10 @@
 # AI at the kernel boundary. Runs on every node.
 #
 # Install:
-#   kubectl apply -f https://install.ternaryphysics.com/k8s.yaml
+#   kubectl apply -f https://ternaryphysics.com/k8s.yaml
 #
 # Uninstall:
-#   kubectl delete -f https://install.ternaryphysics.com/k8s.yaml
+#   kubectl delete -f https://ternaryphysics.com/k8s.yaml
 #
 ---
 apiVersion: v1
