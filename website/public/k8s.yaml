@@ -1,0 +1,162 @@
+# TernaryPhysics Kubernetes DaemonSet
+#
+# AI at the kernel boundary. Runs on every node.
+#
+# Install:
+#   kubectl apply -f https://install.ternaryphysics.com/k8s.yaml
+#
+# Uninstall:
+#   kubectl delete -f https://install.ternaryphysics.com/k8s.yaml
+#
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ternary-physics
+  labels:
+    app.kubernetes.io/name: ternary-physics
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ternary-physics
+  namespace: ternary-physics
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ternary-physics
+  namespace: ternary-physics
+  labels:
+    app.kubernetes.io/name: ternary-physics
+    app.kubernetes.io/version: "0.1.0"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ternary-physics
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ternary-physics
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      serviceAccountName: ternary-physics
+      hostNetwork: true
+      hostPID: true
+      dnsPolicy: ClusterFirstWithHostNet
+      tolerations:
+        # Run on all nodes including control plane
+        - operator: Exists
+      containers:
+        - name: observer
+          image: ghcr.io/ternaryphysics/bpf-inference:ternary-core
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - NET_ADMIN
+                - BPF
+                - PERFMON
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: DATA_DIR
+              value: /var/lib/ternary-physics
+            - name: BPF_PIN_PATH
+              value: /sys/fs/bpf/ternary-physics
+          volumeMounts:
+            - name: bpf
+              mountPath: /sys/fs/bpf
+              mountPropagation: Bidirectional
+            - name: data
+              mountPath: /var/lib/ternary-physics
+            - name: lib-modules
+              mountPath: /lib/modules
+              readOnly: true
+            - name: kernel-debug
+              mountPath: /sys/kernel/debug
+            - name: kernel-btf
+              mountPath: /sys/kernel/btf
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test -d /sys/fs/bpf/ternary-physics
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test -f /sys/fs/bpf/ternary-physics/model_weights
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: bpf
+          hostPath:
+            path: /sys/fs/bpf
+            type: DirectoryOrCreate
+        - name: data
+          hostPath:
+            path: /var/lib/ternary-physics
+            type: DirectoryOrCreate
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+            type: Directory
+        - name: kernel-debug
+          hostPath:
+            path: /sys/kernel/debug
+            type: Directory
+        - name: kernel-btf
+          hostPath:
+            path: /sys/kernel/btf
+            type: Directory
+      terminationGracePeriodSeconds: 30
+---
+# Optional: PodSecurityPolicy for clusters that require it
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: ternary-physics
+spec:
+  privileged: true
+  hostNetwork: true
+  hostPID: true
+  allowedCapabilities:
+    - SYS_ADMIN
+    - NET_ADMIN
+    - BPF
+    - PERFMON
+  volumes:
+    - hostPath
+    - configMap
+    - secret
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
