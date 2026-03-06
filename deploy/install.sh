@@ -16,7 +16,7 @@
 #
 set -e
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 RELEASE_URL="https://github.com/TernaryPhysics/ternary/releases/download/v${VERSION}/ternary-${VERSION}-linux-amd64.tar.gz"
 INSTALL_DIR="/opt/ternary-physics"
 DATA_DIR="/var/lib/ternary-physics"
