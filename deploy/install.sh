@@ -186,9 +186,11 @@ install_ternary() {
     # Create data directory
     mkdir -p "$DATA_DIR"/{models,metrics,samples}
 
-    # Install Python dependencies
+    # Install Python dependencies (torch required for training)
     log "  Installing Python dependencies..."
-    pip3 install numpy 2>/dev/null || python3 -m pip install numpy 2>/dev/null || true
+    pip3 install torch numpy --break-system-packages 2>/dev/null || \
+        python3 -m pip install torch numpy --break-system-packages 2>/dev/null || \
+        pip3 install torch numpy 2>/dev/null || true
 
     log "  Installation complete ✓"
 }
